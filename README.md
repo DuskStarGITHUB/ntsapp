@@ -60,6 +60,12 @@ git clone https://github.com/DuskStarGITHUB/ntsapp.git
 cd ntsapp
 npm install
 
+# Ejecucion automatica
+npm run start
+
+
+#Separado
+
 # Inicia Vite en modo desarrollo para elementos garficos
 npm run dev
 
