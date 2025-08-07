@@ -2,6 +2,11 @@
 
 **NTS App** es una aplicación de escritorio multiplataforma enfocada en la gestión de notas simples y cifradas, con una estética minimalista, transparente y oscura, diseñada para ofrecer rendimiento, privacidad y una experiencia fluida.
 
+NOW UI 1.0
+<img width="874" height="670" alt="imagen" src="https://github.com/user-attachments/assets/c10e5b1a-a288-42e4-b18e-5b5e3efba7de" />
+
+
+
 ---
 
 ## 🚀 Características
