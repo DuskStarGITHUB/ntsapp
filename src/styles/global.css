@@ -8,12 +8,9 @@
 @tailwind utilities;
 
 body {
-  @apply w-screen h-screen m-0 p-0 overflow-hidden;
+  color: var(--primary);
 }
 
-.bg-blur {
-  @apply backdrop-blur-md bg-black/30 w-full h-full flex items-center justify-center;
-}
 
 /*---break---*/
 

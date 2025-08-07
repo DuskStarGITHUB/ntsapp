@@ -10,6 +10,7 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const os = require("os");
+const { execFile } = require("child_process");
 const { baseDir } = require("./src/core/functions");
 const VerifyDependencies = require(path.join(
   __dirname,
@@ -17,7 +18,6 @@ const VerifyDependencies = require(path.join(
   "core",
   "verifyDependencies"
 ));
-const RunApp = require(path.join(__dirname, "src", "core", "runApp"));
 const {
   initBaseDirs,
   listNotes,
@@ -25,6 +25,9 @@ const {
   saveNote,
   isInstalled,
 } = require(path.join(__dirname, "src", "core", "functions"));
+
+const RunApp = require(path.join(__dirname, "src", "core", "runApp"));
+
 
 // WINDOW CONFIG
 function initWindow() {
@@ -45,6 +48,21 @@ function initWindow() {
   win.loadURL("http://localhost:5173");
   win.setMenu(null);
   win.maximize();
+}
+
+// DELETE NOTE
+function deleteNoteWithPython(filePath) {
+  return new Promise((resolve) => {
+    const scriptPath = path.join(__dirname, "src", "scripts", "deleteNote.py");
+    execFile("python3", [scriptPath, filePath], (error, stdout, stderr) => {
+      if (error) {
+        console.error("Error deleting note:", error);
+        resolve({ success: false, error: error.message });
+        return;
+      }
+      resolve({ success: true, output: stdout.trim() });
+    });
+  });
 }
 
 // EXEC
@@ -72,6 +90,9 @@ ipcMain.handle("save-note", (event, filePath, content) => {
 });
 ipcMain.handle("get-base-dir", () => {
   return baseDir;
+});
+ipcMain.handle("delete-note", (event, filePath) => {
+  return deleteNoteWithPython(filePath);
 });
 
 // EXIT

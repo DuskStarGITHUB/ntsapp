@@ -6,4 +6,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   saveNote: (filePath, content) =>
     ipcRenderer.invoke("save-note", filePath, content),
   getBaseDir: () => ipcRenderer.invoke("get-base-dir"),
+  deleteNote: (filePath) => ipcRenderer.invoke("delete-note", filePath),
 });
