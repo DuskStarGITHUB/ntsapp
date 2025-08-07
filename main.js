@@ -1,14 +1,22 @@
+/**
+ * @name NTS App
+ * @description Aplicación de notas NTS con Electron y Vite.
+ * @version 1.0.0
+ * @see [Documentación](https://github.com/DuskStarGITHUB/ntsapp.git)
+ * @created 2025-07-08
+ * @updated 2025-07-07
+ */
+
 // DEPENDENCIES
 const { app, BrowserWindow } = require("electron");
-const { spawn, execSync } = require("child_process");
-const os = require("os");
 const path = require("path");
-const { VerifyDependencies } = require(path.join(
+const VerifyDependencies = require(path.join(
   __dirname,
   "src",
   "core",
   "verifyDependencies"
 ));
+const RunApp = require(path.join(__dirname, "src", "core", "runApp"));
 
 // WINDOWS CONFIG
 function initWindow() {
@@ -30,30 +38,11 @@ function initWindow() {
   win.maximize();
 }
 
-function isKWinRunning() {
-  try {
-    const result = execSync("pgrep -f kwin_x11 || true").toString().trim();
-    return result !== "";
-  } catch {
-    return false;
-  }
-}
-
-function tryApplyBlur() {
-  const platform = os.platform();
-  const desktop = process.env.XDG_CURRENT_DESKTOP || "";
-  const kdeSession = process.env.KDE_FULL_SESSION === "true";
-  if (platform === "linux" && desktop.toLowerCase().includes("kde")) {
-    if (kdeSession || isKWinRunning()) {
-      const py = spawn("python3", ["src/scripts/aplicar_blur.py"]);
-      py.stdout.on("data", (data) => console.log(data.toString()));
-      py.stderr.on("data", (data) => console.error(data.toString()));
-    }
-  }
-}
-
+// EXEC
 app.whenReady().then(() => {
-  VerifyDependencies();
+  const dependencyVerifier = new VerifyDependencies();
+  const runApp = new RunApp();
+  dependencyVerifier.run();
   initWindow();
-  tryApplyBlur();
+  runApp.tryApplyBlur();
 });

@@ -1,60 +1,71 @@
+/**
+ * @file verifyDependencies.js
+ * @description Verifies and installs required dependencies for the application in the OS.
+ */
+
+// DEPENDENCIES
 const { execSync } = require("child_process");
 const os = require("os");
 
-function isInstalled(command) {
-  try {
-    execSync(`command -v ${command}`, { stdio: "ignore" });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function installIfMissing(command, packageName) {
-  if (!isInstalled(command)) {
-    console.log(`[DEPENDENCY] Faltante: ${command}, intentando instalar...`);
-    const platform = os.platform();
+// UNCTION
+class VerifyDependencies {
+  // CHECK IF COMMAND IS INSTALLED
+  isInstalled(command) {
     try {
-      if (platform === "linux") {
-        const distro = execSync("cat /etc/os-release").toString();
-        if (distro.includes("Arch")) {
-          execSync(`sudo pacman -Sy --noconfirm ${packageName}`, {
-            stdio: "inherit",
-          });
-        } else if (distro.includes("Ubuntu") || distro.includes("Debian")) {
-          execSync(`sudo apt update && sudo apt install -y ${packageName}`, {
-            stdio: "inherit",
-          });
+      execSync(`command -v ${command}`, { stdio: "ignore" });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  // INSTALL DEPENDENCIES
+  installIfMissing(command, packageName) {
+    if (!this.isInstalled(command)) {
+      console.log(`[DEPENDENCY] Faltante: ${command}, intentando instalar...`);
+      const platform = os.platform();
+      try {
+        if (platform === "linux") {
+          const distro = execSync("cat /etc/os-release").toString();
+          if (distro.includes("Arch")) {
+            execSync(`sudo pacman -Sy --noconfirm ${packageName}`, {
+              stdio: "inherit",
+            });
+          } else if (distro.includes("Ubuntu") || distro.includes("Debian")) {
+            execSync(`sudo apt update && sudo apt install -y ${packageName}`, {
+              stdio: "inherit",
+            });
+          } else {
+            console.warn(
+              `[DEPENDENCY] Distro no soportada: instala manualmente "${packageName}"`
+            );
+          }
         } else {
           console.warn(
-            `[DEPENDENCY] Distro no soportada: instala manualmente "${packageName}"`
+            `[DEPENDENCY] Instalación automática no implementada para esta plataforma (${platform})`
           );
         }
-      } else {
-        console.warn(
-          `[DEPENDENCY] Instalación automática no implementada para esta plataforma (${platform})`
+      } catch (error) {
+        console.error(
+          `[ERROR] Falló la instalación de ${packageName}:`,
+          error.message
         );
       }
-    } catch (error) {
-      console.error(
-        `[ERROR] Falló la instalación de ${packageName}:`,
-        error.message
-      );
+    } else {
+      console.log(`[DEPENDENCY] OK: ${command}`);
     }
-  } else {
-    console.log(`[DEPENDENCY] OK: ${command}`);
+  }
+  // CHECKER
+  run() {
+    console.log("[DEPENDENCY] Verificando dependencias...");
+    this.installIfMissing("node", "nodejs");
+    const platform = os.platform();
+    if (platform === "linux") {
+      this.installIfMissing("python3", "python3");
+      this.installIfMissing("xdotool", "xdotool");
+      this.installIfMissing("xprop", "x11-utils");
+    }
   }
 }
 
-function VerifyDependencies() {
-  console.log("[DEPENDENCY] Verificando dependencias...");
-  installIfMissing("node", "nodejs");
-  const platform = os.platform();
-  if (platform === "linux") {
-    installIfMissing("python3", "python3");
-    installIfMissing("xdotool", "xdotool");
-    installIfMissing("xprop", "x11-utils");
-  }
-}
-
-module.exports = { VerifyDependencies };
+// EXPORT
+module.exports = VerifyDependencies;

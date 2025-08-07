@@ -1,18 +1,29 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+@file blurKwin.py
+@description Applies a blur effect to the application window on KDE with KWin.
+"""
+
+# DEPENDENCIES
 import subprocess
 import time
 import sys
 
+# CONSTANTS OR VARIANTS
 APP_TITLE = "NTS App"
 
+# CHECK WINDOW ID
 def obtener_id_ventana_por_titulo(title):
     try:
         output = subprocess.check_output(["xdotool", "search", "--name", title])
-        ids = output.decode().strip().split('\n')
+        ids = output.decode().strip().split()
         return ids[0] if ids else None
     except subprocess.CalledProcessError:
         return None
 
+# APPLY BLUR
 def aplicar_blur_directo(ventana_id):
     try:
         subprocess.run([
@@ -25,6 +36,7 @@ def aplicar_blur_directo(ventana_id):
     except subprocess.CalledProcessError as e:
         print("Error aplicando blur:", e)
 
+# GENERAL CALL
 def main():
     print("Buscando ventana...")
     ventana_id = None
@@ -33,12 +45,11 @@ def main():
         if ventana_id:
             break
         time.sleep(1)
-
     if not ventana_id:
         print(f"No se encontró una ventana con título '{APP_TITLE}'")
         sys.exit(1)
-
     aplicar_blur_directo(ventana_id)
 
+# EXEC
 if __name__ == "__main__":
     main()

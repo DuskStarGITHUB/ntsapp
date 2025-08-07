@@ -1,15 +1,27 @@
+<!-- 
+  @file index.html
+  @description The main HTML file for the application.
+  @note No Modify
+-->
+
+<!-- INIT -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+  <!-- METADATA -->
   <head>
+    <title>NTS</title>
     <meta charset="UTF-8" />
-    <title>NTS App</title>
-    <script type="module" src="/src/renderer.js"></script>
-    <link rel="stylesheet" href="/src/index.css" />
+    <meta name="author" content="NTS" />
+    <meta name="description" content="NTS - Your Secure Note-Taking App" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+    />
   </head>
-  <body class="bg-blur text-white">
-    <div>
-      <h1 class="text-3xl font-bold">NTS Blur Window</h1>
-      <p>Electron + Tailwind en KDE</p>
-    </div>
+  <!-- RENDER -->
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./renderer.jsx"></script>
   </body>
 </html>
