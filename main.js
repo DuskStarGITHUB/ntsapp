@@ -2,14 +2,15 @@
  * @name NTS App
  * @description Aplicación de notas NTS con Electron y Vite.
  * @version 1.0.0
- * @see [Documentación](https://github.com/DuskStarGITHUB/ntsapp.git)
  * @created 2025-07-08
- * @updated 2025-07-07
+ * @updated 2025-08-07
  */
 
 // DEPENDENCIES
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
+const os = require("os");
+const { baseDir } = require("./src/core/functions");
 const VerifyDependencies = require(path.join(
   __dirname,
   "src",
@@ -17,8 +18,15 @@ const VerifyDependencies = require(path.join(
   "verifyDependencies"
 ));
 const RunApp = require(path.join(__dirname, "src", "core", "runApp"));
+const {
+  initBaseDirs,
+  listNotes,
+  readNote,
+  saveNote,
+  isInstalled,
+} = require(path.join(__dirname, "src", "core", "functions"));
 
-// WINDOWS CONFIG
+// WINDOW CONFIG
 function initWindow() {
   const win = new BrowserWindow({
     title: "NTS App",
@@ -29,8 +37,9 @@ function initWindow() {
     skipTaskbar: true,
     resizable: true,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, "src", "core", "preload.js"),
     },
   });
   win.loadURL("http://localhost:5173");
@@ -41,8 +50,31 @@ function initWindow() {
 // EXEC
 app.whenReady().then(() => {
   const dependencyVerifier = new VerifyDependencies();
-  const runApp = new RunApp();
   dependencyVerifier.run();
-  initWindow();
+  if (!isInstalled()) {
+    initBaseDirs();
+  }
+  const runApp = new RunApp();
   runApp.tryApplyBlur();
+  initWindow();
+});
+
+// IPC HANDLERS
+ipcMain.handle("list-notes", () => {
+  return listNotes();
+});
+ipcMain.handle("read-note", (event, filePath) => {
+  return readNote(filePath);
+});
+ipcMain.handle("save-note", (event, filePath, content) => {
+  saveNote(filePath, content);
+  return true;
+});
+ipcMain.handle("get-base-dir", () => {
+  return baseDir;
+});
+
+// EXIT
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") app.quit();
 });

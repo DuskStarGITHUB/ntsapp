@@ -1,26 +1,67 @@
-/**
- * @file App.jsx
- * @description The main component for the React application.
- */
+import React, { useEffect, useState } from "react";
+import Sidebar from "./components/Sidebar";
+import NoteEditor from "./components/NoteEditor";
+import "/styles/global.css"
 
-import React from "react";
-import "./styles/global.css";
-import { Textarea } from "./components/ui/textarea";
+export default function App() {
+  const [notes, setNotes] = useState([]);
+  const [selectedNote, setSelectedNote] = useState(null);
+  const [content, setContent] = useState("");
+  const [baseDir, setBaseDir] = useState(null);
 
-function App() {
+  useEffect(() => {
+    window.electronAPI.getBaseDir().then(setBaseDir);
+  }, []);
+
+  useEffect(() => {
+    const fetchNotes = async () => {
+      const list = await window.electronAPI.listNotes();
+      setNotes(list);
+    };
+    fetchNotes();
+    const interval = setInterval(fetchNotes, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (!selectedNote) {
+      setContent("");
+      return;
+    }
+    (async () => {
+      const text = await window.electronAPI.readNote(selectedNote.path);
+      setContent(text);
+    })();
+  }, [selectedNote]);
+
+  const createNote = async () => {
+    if (!baseDir) return;
+    const newNoteName = `nota-${Date.now()}.md`;
+    const fullPath = `${baseDir}/notes/${newNoteName}`;
+    await window.electronAPI.saveNote(fullPath, "# Nueva Nota\n");
+    setSelectedNote({ name: newNoteName, path: fullPath });
+  };
+
+  const saveContent = async (newContent) => {
+    setContent(newContent);
+    if (selectedNote) {
+      await window.electronAPI.saveNote(selectedNote.path, newContent);
+    }
+  };
+
   return (
-    <div className="flex flex-col h-screen w-screen bg-black text-white p-4">
-      <header className="mb-4">
-        <h1 className="text-2xl font-semibold">Bloc de Notas - NTS</h1>
-      </header>
-      <main className="flex-1">
-        <Textarea
-          className="w-full h-full resize-none bg-zinc-900 text-white border border-zinc-700 rounded-xl p-4 text-base focus:outline-none focus:ring-2 focus:ring-red-500"
-          placeholder="Escribe tu nota aquí..."
-        />
-      </main>
+    <div className="flex h-screen bg-zinc-900 text-white">
+      <Sidebar
+        notes={notes}
+        selectedNote={selectedNote}
+        onSelectNote={setSelectedNote}
+        onCreateNote={createNote}
+      />
+      <NoteEditor
+        note={selectedNote}
+        content={content}
+        onChangeContent={saveContent}
+      />
     </div>
   );
 }
-
-export default App;
