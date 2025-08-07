@@ -46,6 +46,7 @@ ntsapp/
 ## 🛠️ Instalación
 
 ```bash
+git clone https://github.com/tuusuario/ntsapp.git
 cd ntsapp
 npm install
 
