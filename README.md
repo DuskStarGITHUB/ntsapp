@@ -9,8 +9,10 @@
 - 🧠 Interfaz intuitiva con soporte para `.txt` y `.nts` (formato cifrado).
 - 🌐 Tecnología base: [Electron](https://electronjs.org), [Vite](https://vitejs.dev).
 - 🔐 Soporte para cifrado personalizado.
-- 💻 Soporte Automatico de Transparencia + desenfoque (blur) en KDE Plasma con KWin (Linux).
 - ⚙️ Compatible con Linux, Windows y macOS.
+- 💻 Soporte Automatico de Transparencia + desenfoque (blur) en KDE Plasma con KWin (Linux).
+<img width="1042" height="779" alt="imagen" src="https://github.com/user-attachments/assets/c8b41de4-173f-468f-879e-d4a47c1af937" />
+
 
 ---
 
