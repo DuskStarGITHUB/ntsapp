@@ -6,64 +6,72 @@
  * @updated 2025-08-07
  */
 
+// STATE EXEC
+const userApp = 'developer'
+
 // DEPENDENCIES
-const { app, BrowserWindow } = require("electron");
-const path = require("path");
+const { app, BrowserWindow } = require('electron')
+const path = require('path')
 const VerifyDependencies = require(path.join(
   __dirname,
-  "src",
-  "core",
-  "verifyDependencies"
-));
+  'src',
+  'core',
+  'verifyDependencies'
+))
 const { initBaseDirs, isInstalled } = require(path.join(
   __dirname,
-  "src",
-  "core",
-  "functions"
-));
-const RunApp = require(path.join(__dirname, "src", "core", "runApp"));
+  'src',
+  'core',
+  'functions'
+))
+const RunApp = require(path.join(__dirname, 'src', 'core', 'runApp'))
 const { setupIPCHandlers } = require(path.join(
   __dirname,
-  "src",
-  "core",
-  "ipcHandlers"
-));
+  'src',
+  'core',
+  'ipcHandlers'
+))
 
 // WINDOW CONFIG
 function initWindow() {
   const win = new BrowserWindow({
-    title: "NTS App",
+    title: 'NTS App',
     transparent: true,
     frame: true,
     hasShadow: false,
     alwaysOnTop: false,
     skipTaskbar: true,
     resizable: true,
+    vibrancy: 'under-window',
+    visualEffectState: 'active',
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, "src", "core", "preload.js"),
-    },
-  });
-  win.loadURL("http://localhost:5173");
-  win.setMenu(null);
-  win.maximize();
+      preload: path.join(__dirname, 'src', 'core', 'preload.js')
+    }
+  })
+  win.loadURL('http://localhost:5173')
+  if (userApp === 'developer') {
+    win.webContents.openDevTools()
+  }
+  win.setMenu(null)
+  win.maximize()
 }
 
 // EXEC
 app.whenReady().then(() => {
-  const dependencyVerifier = new VerifyDependencies();
-  dependencyVerifier.run();
+  const dependencyVerifier = new VerifyDependencies()
+  dependencyVerifier.run()
   if (!isInstalled()) {
-    initBaseDirs();
+    initBaseDirs()
   }
-  const runApp = new RunApp();
-  runApp.tryApplyBlur();
-  setupIPCHandlers();
-  initWindow();
-});
+  const runApp = new RunApp()
+  runApp.tryApplyBlur()
+  setupIPCHandlers()
+  initWindow()
+})
 
 // EXIT
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
-});
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit()
+})
