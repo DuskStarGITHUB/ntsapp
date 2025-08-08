@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "dev": "vite",
-    "start": "concurrently \"npm run dev\" \"npm run dev:electron\"",
+    "start": "concurrently --names \"VITE,ELECTRON\" --kill-others \"npm run dev\" \"npm run dev:electron\"",
     "dev:electron": "electron .",
     "build": "vite build"
   },
