@@ -63,12 +63,9 @@ npm install
 # Ejecucion automatica
 npm run start
 
-
 #Separado
-
-# Inicia Vite en modo desarrollo para elementos garficos
+# Inicia Vite en modo desarrollo para elementos graficos
 npm run dev
-
 # En otra terminal, lanza la app Electron para ventana
 npm run electron
 
