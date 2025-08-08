@@ -29,6 +29,7 @@ const { setupIPCHandlers } = require(path.join(
   "ipcHandlers"
 ));
 
+// WINDOW CONFIG
 function initWindow() {
   const win = new BrowserWindow({
     title: "NTS App",
@@ -49,6 +50,7 @@ function initWindow() {
   win.maximize();
 }
 
+// EXEC
 app.whenReady().then(() => {
   const dependencyVerifier = new VerifyDependencies();
   dependencyVerifier.run();
