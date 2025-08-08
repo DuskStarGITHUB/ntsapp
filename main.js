@@ -7,29 +7,28 @@
  */
 
 // DEPENDENCIES
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow } = require("electron");
 const path = require("path");
-const os = require("os");
-const { execFile } = require("child_process");
-const { baseDir } = require("./src/core/functions");
 const VerifyDependencies = require(path.join(
   __dirname,
   "src",
   "core",
   "verifyDependencies"
 ));
-const {
-  initBaseDirs,
-  listNotes,
-  readNote,
-  saveNote,
-  isInstalled,
-} = require(path.join(__dirname, "src", "core", "functions"));
-
+const { initBaseDirs, isInstalled } = require(path.join(
+  __dirname,
+  "src",
+  "core",
+  "functions"
+));
 const RunApp = require(path.join(__dirname, "src", "core", "runApp"));
+const { setupIPCHandlers } = require(path.join(
+  __dirname,
+  "src",
+  "core",
+  "ipcHandlers"
+));
 
-
-// WINDOW CONFIG
 function initWindow() {
   const win = new BrowserWindow({
     title: "NTS App",
@@ -50,22 +49,6 @@ function initWindow() {
   win.maximize();
 }
 
-// DELETE NOTE
-function deleteNoteWithPython(filePath) {
-  return new Promise((resolve) => {
-    const scriptPath = path.join(__dirname, "src", "scripts", "deleteNote.py");
-    execFile("python3", [scriptPath, filePath], (error, stdout, stderr) => {
-      if (error) {
-        console.error("Error deleting note:", error);
-        resolve({ success: false, error: error.message });
-        return;
-      }
-      resolve({ success: true, output: stdout.trim() });
-    });
-  });
-}
-
-// EXEC
 app.whenReady().then(() => {
   const dependencyVerifier = new VerifyDependencies();
   dependencyVerifier.run();
@@ -74,25 +57,8 @@ app.whenReady().then(() => {
   }
   const runApp = new RunApp();
   runApp.tryApplyBlur();
+  setupIPCHandlers();
   initWindow();
-});
-
-// IPC HANDLERS
-ipcMain.handle("list-notes", () => {
-  return listNotes();
-});
-ipcMain.handle("read-note", (event, filePath) => {
-  return readNote(filePath);
-});
-ipcMain.handle("save-note", (event, filePath, content) => {
-  saveNote(filePath, content);
-  return true;
-});
-ipcMain.handle("get-base-dir", () => {
-  return baseDir;
-});
-ipcMain.handle("delete-note", (event, filePath) => {
-  return deleteNoteWithPython(filePath);
 });
 
 // EXIT
