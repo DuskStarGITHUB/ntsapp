@@ -7,7 +7,7 @@ export default function NoteContentTextarea({ value, onChange }) {
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder="Escribe tu nota en Markdown..."
-      className="flex-1 bg-zinc-800 text-white border border-zinc-600 rounded-md p-4 resize-none mb-6 font-mono text-sm"
+      className="flex-1 bg-zinc-900 text-white border border-zinc-600 rounded-md p-4 resize-none mb-6 font-mono text-sm overflow-auto h-full"
     />
   );
 }
