@@ -17,6 +17,20 @@ function deleteNoteWithPython(filePath) {
   });
 }
 
+function renameNoteWithPython(oldPath, newName) {
+  return new Promise((resolve) => {
+    const scriptPath = path.join(__dirname, "..", "scripts", "renameNote.py");
+    execFile("python3", [scriptPath, oldPath, newName], (error, stdout, stderr) => {
+      if (error) {
+        console.error("Error renaming note:", error);
+        resolve({ success: false, error: error.message });
+        return;
+      }
+      resolve({ success: true, output: stdout.trim() });
+    });
+  });
+}
+
 function setupIPCHandlers() {
   ipcMain.handle("list-notes", () => {
     return listNotes();
@@ -33,6 +47,9 @@ function setupIPCHandlers() {
   });
   ipcMain.handle("delete-note", (event, filePath) => {
     return deleteNoteWithPython(filePath);
+  });
+  ipcMain.handle("rename-note", (event, oldPath, newName) => {
+    return renameNoteWithPython(oldPath, newName);
   });
 }
 
