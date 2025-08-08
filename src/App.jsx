@@ -18,7 +18,7 @@ export default function App() {
   } = useNotes();
 
   return (
-    <div className="flex h-screen bg-zinc-900 text-white">
+    <div className="flex h-screen bg-transparent text-white">
       <Sidebar
         notes={notes}
         selectedNote={selectedNote}

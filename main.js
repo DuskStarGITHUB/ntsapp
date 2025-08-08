@@ -52,7 +52,7 @@ function initWindow() {
   })
   win.loadURL('http://localhost:5173')
   if (userApp === 'developer') {
-    win.webContents.openDevTools()
+    win.webContents.openDevTools({ mode: 'detach' })
   }
   win.setMenu(null)
   win.maximize()
