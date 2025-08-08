@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 
 export const useNotes = () => {
@@ -7,13 +6,17 @@ export const useNotes = () => {
   const [content, setContent] = useState("");
   const [baseDir, setBaseDir] = useState(null);
 
+  const fetchNotes = async () => {
+    const list = await window.electronAPI.listNotes();
+    setNotes(list);
+  };
+
   const deleteNote = async (note) => {
     if (!note) return;
     const result = await window.electronAPI.deleteNote(note.path);
     if (result.success) {
       setSelectedNote(null);
-      const list = await window.electronAPI.listNotes();
-      setNotes(list);
+      fetchNotes();
     } else {
       alert("Error al eliminar la nota: " + (result.error || "Desconocido"));
     }
@@ -32,42 +35,31 @@ export const useNotes = () => {
       count++;
     }
     await window.electronAPI.saveNote(newPath, originalContent);
-    setSelectedNote({ name: newName, path: newPath });
-    const list = await window.electronAPI.listNotes();
-    setNotes(list);
+    const newNote = { name: newName, path: newPath };
+    setSelectedNote(newNote);
+    fetchNotes();
   };
 
-  useEffect(() => {
-    window.electronAPI.getBaseDir().then(setBaseDir);
-  }, []);
-
-  useEffect(() => {
-    const fetchNotes = async () => {
-      const list = await window.electronAPI.listNotes();
-      setNotes(list);
-    };
-    fetchNotes();
-    const interval = setInterval(fetchNotes, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    if (!selectedNote) {
-      setContent("");
-      return;
+  const renameNote = async (note, newName) => {
+    if (!note || !newName) return;
+    const result = await window.electronAPI.renameNote(note.path, newName);
+    if (result.success) {
+      const newPath = `${baseDir}/notes/${newName}.md`;
+      setSelectedNote({ name: `${newName}.md`, path: newPath });
+      fetchNotes();
+    } else {
+      alert("Error al renombrar la nota: " + (result.error || "Desconocido"));
     }
-    (async () => {
-      const text = await window.electronAPI.readNote(selectedNote.path);
-      setContent(text);
-    })();
-  }, [selectedNote]);
+  };
 
   const createNote = async () => {
     if (!baseDir) return;
     const newNoteName = `nota-${Date.now()}.md`;
     const fullPath = `${baseDir}/notes/${newNoteName}`;
     await window.electronAPI.saveNote(fullPath, "# Nueva Nota");
-    setSelectedNote({ name: newNoteName, path: fullPath });
+    const newNote = { name: newNoteName, path: fullPath };
+    setSelectedNote(newNote);
+    fetchNotes();
   };
 
   const saveContent = async (newContent) => {
@@ -76,6 +68,21 @@ export const useNotes = () => {
       await window.electronAPI.saveNote(selectedNote.path, newContent);
     }
   };
+
+  useEffect(() => {
+    window.electronAPI.getBaseDir().then(setBaseDir);
+    fetchNotes();
+    const interval = setInterval(fetchNotes, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (selectedNote) {
+      window.electronAPI.readNote(selectedNote.path).then(setContent);
+    } else {
+      setContent("");
+    }
+  }, [selectedNote]);
 
   return {
     notes,
@@ -86,5 +93,6 @@ export const useNotes = () => {
     createNote,
     saveContent,
     setSelectedNote,
+    renameNote,
   };
 };

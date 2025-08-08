@@ -14,6 +14,7 @@ export default function App() {
     createNote,
     saveContent,
     setSelectedNote,
+    renameNote,
   } = useNotes();
 
   return (
@@ -30,6 +31,7 @@ export default function App() {
         note={selectedNote}
         content={content}
         onChangeContent={saveContent}
+        onRenameNote={renameNote}
       />
     </div>
   );

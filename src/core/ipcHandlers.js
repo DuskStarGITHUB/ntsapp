@@ -18,11 +18,14 @@ function deleteNoteWithPython(filePath) {
 }
 
 function renameNoteWithPython(oldPath, newName) {
+  console.log(`Intentando renombrar: ${oldPath} -> ${newName}`); // LOG 1
   return new Promise((resolve) => {
     const scriptPath = path.join(__dirname, "..", "scripts", "renameNote.py");
     execFile("python3", [scriptPath, oldPath, newName], (error, stdout, stderr) => {
+      console.log("Salida del script:", stdout); // LOG 2
+      console.error("Error del script:", stderr); // LOG 3
       if (error) {
-        console.error("Error renaming note:", error);
+        console.error("Error de ejecución del script:", error); // LOG 4
         resolve({ success: false, error: error.message });
         return;
       }
@@ -50,6 +53,10 @@ function setupIPCHandlers() {
   });
   ipcMain.handle("rename-note", (event, oldPath, newName) => {
     return renameNoteWithPython(oldPath, newName);
+  });
+
+  ipcMain.on("log-message", (event, message) => {
+    console.log("[FRONTEND LOG]:", message);
   });
 }
 

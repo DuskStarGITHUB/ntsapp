@@ -26,9 +26,8 @@ export default function MenuDrop({
       className="absolute z-50 bg-zinc-800 text-white border border-zinc-600 rounded shadow-lg w-48"
       style={{ top: y, left: x }}
     >
-      {/* BOTÓN Renombrar quitado */}
-
-      <button
+      
+        <button
         className="w-full px-4 py-2 hover:bg-zinc-700 text-left"
         onClick={() => {
           onDuplicate(note);
