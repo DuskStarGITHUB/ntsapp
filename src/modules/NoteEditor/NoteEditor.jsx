@@ -1,6 +1,6 @@
 import React from 'react'
 import NoteTitleInput from './NoteTitleInput'
-import NoteContentTextarea from './NoteContentTextarea'
+import Editor from './Editor'
 import MarkdownPreview from './MarkdownPreview'
 
 export default function NoteEditor({
@@ -16,13 +16,17 @@ export default function NoteEditor({
       </main>
     )
   }
-
   return (
-    <main className="flex-1 flex flex-col p-8 bg-transparent space-y-4">
+    <main className="flex-1 flex flex-col p-8 bg-transparent space-y-4 overflow-hidden">
       <NoteTitleInput title={note.name} onRename={onRenameNote} note={note} />
       <div className="flex flex-1 gap-4">
-        <div className="flex-1">
-          <NoteContentTextarea value={content} onChange={onChangeContent} />
+        <div className="flex-1 flex flex-col">
+          {/* Reemplazamos NoteContentTextarea con el nuevo Editor */}
+          <Editor
+            value={content}
+            onChange={onChangeContent}
+            className="flex-1 bg-zinc-900 rounded-md overflow-hidden"
+          />
         </div>
         <div className="flex-1">
           <MarkdownPreview content={content} />

@@ -4,6 +4,10 @@
 
 .markdown-body {
   font-size: 10px !important;
-  background-color: #00000000 !important;
+  background-color: #0000008a !important;
+  border: 1px solid white !important;
+}
+
+.fix-border{
   border: 1px solid white !important;
 }

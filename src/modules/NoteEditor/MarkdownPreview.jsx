@@ -7,7 +7,7 @@ import '../../styles/preview.css'
 
 export default function MarkdownPreview({ content }) {
   return (
-    <section className="markdown-body rounded-md p-4 h-full overflow-auto">
+    <section className="markdown-body rounded-md p-4 h-full overflow-auto ">
       <ScrollArea>
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
       </ScrollArea>
