@@ -21,20 +21,16 @@ function setupIPCHandlers() {
   ipcMain.handle("list-notes", () => {
     return listNotes();
   });
-
   ipcMain.handle("read-note", (event, filePath) => {
     return readNote(filePath);
   });
-
   ipcMain.handle("save-note", (event, filePath, content) => {
     saveNote(filePath, content);
     return true;
   });
-
   ipcMain.handle("get-base-dir", () => {
     return baseDir;
   });
-
   ipcMain.handle("delete-note", (event, filePath) => {
     return deleteNoteWithPython(filePath);
   });
