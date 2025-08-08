@@ -9,7 +9,6 @@ export default function MenuDrop({
   onClose,
 }) {
   const menuRef = useRef();
-
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {

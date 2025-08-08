@@ -5,12 +5,10 @@ export const useNotes = () => {
   const [selectedNote, setSelectedNote] = useState(null);
   const [content, setContent] = useState("");
   const [baseDir, setBaseDir] = useState(null);
-
   const fetchNotes = async () => {
     const list = await window.electronAPI.listNotes();
     setNotes(list);
   };
-
   const deleteNote = async (note) => {
     if (!note) return;
     const result = await window.electronAPI.deleteNote(note.path);
@@ -21,7 +19,6 @@ export const useNotes = () => {
       alert("Error al eliminar la nota: " + (result.error || "Desconocido"));
     }
   };
-
   const duplicateNote = async (note) => {
     if (!note) return;
     const originalContent = await window.electronAPI.readNote(note.path);
@@ -39,7 +36,6 @@ export const useNotes = () => {
     setSelectedNote(newNote);
     fetchNotes();
   };
-
   const renameNote = async (note, newName) => {
     if (!note || !newName) return;
     const result = await window.electronAPI.renameNote(note.path, newName);
@@ -51,7 +47,6 @@ export const useNotes = () => {
       alert("Error al renombrar la nota: " + (result.error || "Desconocido"));
     }
   };
-
   const createNote = async () => {
     if (!baseDir) return;
     const newNoteName = `nota-${Date.now()}.md`;
@@ -61,21 +56,18 @@ export const useNotes = () => {
     setSelectedNote(newNote);
     fetchNotes();
   };
-
   const saveContent = async (newContent) => {
     setContent(newContent);
     if (selectedNote) {
       await window.electronAPI.saveNote(selectedNote.path, newContent);
     }
   };
-
   useEffect(() => {
     window.electronAPI.getBaseDir().then(setBaseDir);
     fetchNotes();
     const interval = setInterval(fetchNotes, 3000);
     return () => clearInterval(interval);
   }, []);
-
   useEffect(() => {
     if (selectedNote) {
       window.electronAPI.readNote(selectedNote.path).then(setContent);
@@ -83,7 +75,6 @@ export const useNotes = () => {
       setContent("");
     }
   }, [selectedNote]);
-
   return {
     notes,
     selectedNote,

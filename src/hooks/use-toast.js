@@ -44,19 +44,14 @@ export const reducer = (state, action) => {
         ...state,
         toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
       };
-
     case "UPDATE_TOAST":
       return {
         ...state,
         toasts: state.toasts.map((t) =>
           t.id === action.toast.id ? { ...t, ...action.toast } : t),
       };
-
     case "DISMISS_TOAST": {
       const { toastId } = action
-
-      // ! Side effects ! - This could be extracted into a dismissToast() action,
-      // but I'll keep it here for simplicity
       if (toastId) {
         addToRemoveQueue(toastId)
       } else {
@@ -64,7 +59,6 @@ export const reducer = (state, action) => {
           addToRemoveQueue(toast.id)
         })
       }
-
       return {
         ...state,
         toasts: state.toasts.map((t) =>
@@ -91,7 +85,6 @@ export const reducer = (state, action) => {
 }
 
 const listeners = []
-
 let memoryState = { toasts: [] }
 
 function dispatch(action) {
@@ -105,14 +98,12 @@ function toast({
   ...props
 }) {
   const id = genId()
-
   const update = (props) =>
     dispatch({
       type: "UPDATE_TOAST",
       toast: { ...props, id },
     })
   const dismiss = () => dispatch({ type: "DISMISS_TOAST", toastId: id })
-
   dispatch({
     type: "ADD_TOAST",
     toast: {
@@ -124,7 +115,6 @@ function toast({
       },
     },
   })
-
   return {
     id: id,
     dismiss,
@@ -134,7 +124,6 @@ function toast({
 
 function useToast() {
   const [state, setState] = React.useState(memoryState)
-
   React.useEffect(() => {
     listeners.push(setState)
     return () => {
@@ -144,7 +133,6 @@ function useToast() {
       }
     };
   }, [state])
-
   return {
     ...state,
     toast,
