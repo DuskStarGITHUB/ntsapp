@@ -7,7 +7,7 @@ const Editor = ({ value, onChange }) => {
     doc => onChange(doc),
     [onChange]
   );
-  const [refContainer, editorView] = useCodeMirror({
+  const [refContainer] = useCodeMirror({
     initialDoc: value,
     onChange: memoizedOnChange
   })
