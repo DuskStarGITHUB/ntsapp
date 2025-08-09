@@ -1,15 +1,30 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef, useEffect } from 'react'
 import useCodeMirror from '../../lib/use-codemirror'
 import "../../styles/editor.css"
 
 const Editor = ({ value, onChange }) => {
-  const memoizedOnChange = useCallback(
-    doc => onChange(doc),
-    [onChange]
+  const onChangeRef = useRef(onChange);
+
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  const debouncedOnChange = useCallback(
+    (doc) => {
+      const handler = onChangeRef.current;
+      if (handler) {
+        clearTimeout(debouncedOnChange.timeout);
+        debouncedOnChange.timeout = setTimeout(() => {
+          handler(doc);
+        }, 300); // Debounce for 300ms
+      }
+    },
+    []
   );
+
   const [refContainer] = useCodeMirror({
     initialDoc: value,
-    onChange: memoizedOnChange
+    onChange: debouncedOnChange
   })
   return (
     <div className="flex bg-zinc-900 rounded-md overflow-hidden fix-border h-full">

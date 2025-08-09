@@ -14,7 +14,7 @@ export const useNotes = () => {
     const result = await window.electronAPI.deleteNote(note.path);
     if (result.success) {
       setSelectedNote(null);
-      fetchNotes();
+      await fetchNotes(); // Ensure notes are updated before setting selectedNote
     } else {
       alert("Error al eliminar la nota: " + (result.error || "Desconocido"));
     }
@@ -32,17 +32,21 @@ export const useNotes = () => {
       count++;
     }
     await window.electronAPI.saveNote(newPath, originalContent);
-    const newNote = { name: newName, path: newPath };
-    setSelectedNote(newNote);
-    fetchNotes();
+    await fetchNotes(); // Ensure notes are updated before setting selectedNote
+    const newNote = notes.find((n) => n.name === newName);
+    if (newNote) {
+      setSelectedNote(newNote);
+    }
   };
   const renameNote = async (note, newName) => {
     if (!note || !newName) return;
     const result = await window.electronAPI.renameNote(note.path, newName);
     if (result.success) {
-      const newPath = `${baseDir}/notes/${newName}.md`;
-      setSelectedNote({ name: `${newName}.md`, path: newPath });
-      fetchNotes();
+      await fetchNotes(); // Ensure notes are updated before setting selectedNote
+      const newNote = notes.find((n) => n.name === `${newName}.md`);
+      if (newNote) {
+        setSelectedNote(newNote);
+      }
     } else {
       alert("Error al renombrar la nota: " + (result.error || "Desconocido"));
     }
@@ -52,9 +56,11 @@ export const useNotes = () => {
     const newNoteName = `nota-${Date.now()}.md`;
     const fullPath = `${baseDir}/notes/${newNoteName}`;
     await window.electronAPI.saveNote(fullPath, "# Nueva Nota");
-    const newNote = { name: newNoteName, path: fullPath };
-    setSelectedNote(newNote);
-    fetchNotes();
+    await fetchNotes(); // Ensure notes are updated before setting selectedNote
+    const newNote = notes.find((n) => n.name === newNoteName);
+    if (newNote) {
+      setSelectedNote(newNote);
+    }
   };
   const saveContent = useCallback(async (newContent) => {
     if (newContent !== content) { // Only update if content has actually changed
@@ -63,12 +69,10 @@ export const useNotes = () => {
         await window.electronAPI.saveNote(selectedNote.path, newContent);
       }
     }
-  }, [content, selectedNote]); // Dependencies for useCallback
+  }, [selectedNote]); // Dependencies for useCallback
   useEffect(() => {
     window.electronAPI.getBaseDir().then(setBaseDir);
     fetchNotes();
-    const interval = setInterval(fetchNotes, 3000);
-    return () => clearInterval(interval);
   }, []);
   useEffect(() => {
     if (selectedNote) {
