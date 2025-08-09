@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export const useNotes = () => {
   const [notes, setNotes] = useState([]);
@@ -56,14 +56,14 @@ export const useNotes = () => {
     setSelectedNote(newNote);
     fetchNotes();
   };
-  const saveContent = async (newContent) => {
+  const saveContent = useCallback(async (newContent) => {
     if (newContent !== content) { // Only update if content has actually changed
       setContent(newContent);
       if (selectedNote) {
         await window.electronAPI.saveNote(selectedNote.path, newContent);
       }
     }
-  };
+  }, [content, selectedNote]); // Dependencies for useCallback
   useEffect(() => {
     window.electronAPI.getBaseDir().then(setBaseDir);
     fetchNotes();

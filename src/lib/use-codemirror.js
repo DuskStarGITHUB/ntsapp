@@ -9,10 +9,10 @@ import { oneDark } from '@codemirror/theme-one-dark'
 export const transparentTheme = EditorView.theme({
   '&': {
     backgroundColor: 'transparent !important',
-    height: '100%'
+    height: '100%',
+    width: '100%'
     }
 })
-
 const loadLanguageData = async () => {
   const module = await import('@codemirror/language-data')
   languages = module.languages
@@ -22,12 +22,10 @@ const useCodeMirror = props => {
   const refContainer = useRef(null)
   const [editorView, setEditorView] = useState()
   const { onChange, initialDoc } = props
-  const isUpdatingInternally = useRef(false);
-
-  // Effect for initializing the editor
+  const ignoreNextExternalUpdate = useRef(false);
+  const currentDoc = useRef(initialDoc);
   useEffect(() => {
     if (!refContainer.current) return
-
     const startState = EditorState.create({
       doc: initialDoc,
       extensions: [
@@ -43,40 +41,38 @@ const useCodeMirror = props => {
         EditorView.updateListener.of(update => {
           if (update.changes) {
             const newDoc = update.state.doc.toString();
-            if (newDoc !== initialDoc) {
-              isUpdatingInternally.current = true;
-              onChange && onChange(newDoc);
-            }
+            currentDoc.current = newDoc;
+            ignoreNextExternalUpdate.current = true;
+            onChange && onChange(newDoc);
           }
         })
       ]
     })
-
     const view = new EditorView({
       state: startState,
       parent: refContainer.current
     })
     setEditorView(view)
-
     return () => {
       view.destroy()
     }
   }, [refContainer, onChange])
-
-  // Effect for updating the editor content when initialDoc changes
   useEffect(() => {
-    if (editorView && !isUpdatingInternally.current && initialDoc !== editorView.state.doc.toString()) {
-      editorView.dispatch({
-        changes: {
-          from: 0,
-          to: editorView.state.doc.length,
-          insert: initialDoc || ''
-        }
-      })
+    if (editorView) {
+      if (ignoreNextExternalUpdate.current) {
+        ignoreNextExternalUpdate.current = false;
+      } else if (initialDoc !== currentDoc.current) {
+        editorView.dispatch({
+          changes: {
+            from: 0,
+            to: editorView.state.doc.length,
+            insert: initialDoc || ''
+          }
+        });
+        currentDoc.current = initialDoc;
+      }
     }
-    isUpdatingInternally.current = false;
   }, [initialDoc, editorView])
-
   return [refContainer, editorView]
 }
 
