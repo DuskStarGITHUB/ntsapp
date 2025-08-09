@@ -57,9 +57,11 @@ export const useNotes = () => {
     fetchNotes();
   };
   const saveContent = async (newContent) => {
-    setContent(newContent);
-    if (selectedNote) {
-      await window.electronAPI.saveNote(selectedNote.path, newContent);
+    if (newContent !== content) { // Only update if content has actually changed
+      setContent(newContent);
+      if (selectedNote) {
+        await window.electronAPI.saveNote(selectedNote.path, newContent);
+      }
     }
   };
   useEffect(() => {

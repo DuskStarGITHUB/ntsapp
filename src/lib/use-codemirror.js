@@ -22,7 +22,9 @@ const useCodeMirror = props => {
   const refContainer = useRef(null)
   const [editorView, setEditorView] = useState()
   const { onChange, initialDoc } = props
+  const isUpdatingInternally = useRef(false);
 
+  // Effect for initializing the editor
   useEffect(() => {
     if (!refContainer.current) return
 
@@ -40,7 +42,11 @@ const useCodeMirror = props => {
         EditorView.lineWrapping,
         EditorView.updateListener.of(update => {
           if (update.changes) {
-            onChange && onChange(update.state.doc.toString())
+            const newDoc = update.state.doc.toString();
+            if (newDoc !== initialDoc) {
+              isUpdatingInternally.current = true;
+              onChange && onChange(newDoc);
+            }
           }
         })
       ]
@@ -55,7 +61,21 @@ const useCodeMirror = props => {
     return () => {
       view.destroy()
     }
-  }, [refContainer])
+  }, [refContainer, onChange])
+
+  // Effect for updating the editor content when initialDoc changes
+  useEffect(() => {
+    if (editorView && !isUpdatingInternally.current && initialDoc !== editorView.state.doc.toString()) {
+      editorView.dispatch({
+        changes: {
+          from: 0,
+          to: editorView.state.doc.length,
+          insert: initialDoc || ''
+        }
+      })
+    }
+    isUpdatingInternally.current = false;
+  }, [initialDoc, editorView])
 
   return [refContainer, editorView]
 }
