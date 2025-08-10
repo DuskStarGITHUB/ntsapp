@@ -84,13 +84,16 @@ npm run electron
 
 ## 🛠️ Lanzamiento
 
-```main.js
 
-# Modo de user/developer
+Modo de user/developer
+
+```main.js
 
 // STATE EXEC
 const userApp = 'developer'
 
-## Cambiar para Mostrar/Ocultar DEVTOOLs DevTools
-
 ```
+
+Cambiar para Mostrar/Ocultar DEVTOOLs DevTools en archivo main.js
+
+
