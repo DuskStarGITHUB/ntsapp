@@ -7,22 +7,29 @@ const Editor = ({ value, onChange }) => {
   useEffect(() => {
     onChangeRef.current = onChange;
   }, [onChange]);
-  const debouncedOnChange = useCallback(
-    (doc) => {
+
+  const timeoutRef = useRef(null);
+  const editorViewRef = useRef(null);
+
+  const onEditorChange = useCallback(() => {
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
       const handler = onChangeRef.current;
-      if (handler) {
-        clearTimeout(debouncedOnChange.timeout);
-        debouncedOnChange.timeout = setTimeout(() => {
-          handler(doc);
-        }, 300);
+      if (handler && editorViewRef.current) {
+        const currentDoc = editorViewRef.current.state.doc.toString();
+        handler(currentDoc);
       }
-    },
-    []
-  );
+    }, 300);
+  }, []);
+
   const [refContainer, editorView] = useCodeMirror({
     initialDoc: value,
-    onChange: debouncedOnChange
+    onChange: onEditorChange
   })
+
+  useEffect(() => {
+    editorViewRef.current = editorView;
+  }, [editorView]);
 
   useEffect(() => {
     if (editorView) {

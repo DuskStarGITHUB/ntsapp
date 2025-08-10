@@ -6,15 +6,6 @@ import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
 let languages = []
 import { oneDark } from '@codemirror/theme-one-dark'
 
-const debounce = (func, delay) => {
-  let timeout;
-  return function(...args) {
-    const context = this;
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(context, args), delay);
-  };
-};
-
 export const transparentTheme = EditorView.theme({
   '&': {
     backgroundColor: 'transparent !important',
@@ -31,11 +22,6 @@ const useCodeMirror = props => {
   const refContainer = useRef(null)
   const [editorView, setEditorView] = useState()
   const { onChange, initialDoc } = props
-  const ignoreNextExternalUpdate = useRef(false);
-  const currentDoc = useRef(initialDoc);
-  const debouncedOnChange = useRef(debounce(newDoc => {
-    onChange && onChange(newDoc);
-  }, 300)).current;
 
   useEffect(() => {
     if (!refContainer.current) return
@@ -52,11 +38,8 @@ const useCodeMirror = props => {
         transparentTheme,
         EditorView.lineWrapping,
         EditorView.updateListener.of(update => {
-          if (update.changes) {
-            const newDoc = update.state.doc.toString();
-            currentDoc.current = newDoc;
-            ignoreNextExternalUpdate.current = true;
-            debouncedOnChange(newDoc); // Use debounced onChange
+          if (update.docChanged) {
+            onChange && onChange();
           }
         })
       ]
