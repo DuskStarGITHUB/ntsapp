@@ -28,19 +28,30 @@ NOW UI 2.0
 
 ```bash
 ntsapp/
-├── main.js # Punto de entrada de Electron
-├── package.json # Configuración y dependencias del proyecto
-├── vite.config.js # Configuración de Vite
-├── README.md # Este archivo
-├── node_modules/ # Dependencias instaladas
+├── main.js # Punto de entrada de Electron, gestiona la ventana principal y la comunicación con el renderer.
+├── package.json # Define los scripts, dependencias y metadatos del proyecto.
+├── vite.config.js # Configuración de Vite para el empaquetado y desarrollo del frontend.
+├── tailwind.config.js # Configuración de Tailwind CSS para los estilos de la aplicación.
+├── postcss.config.js # Configuración de PostCSS para el procesamiento de CSS.
+├── prettier.config.js # Reglas de formato de código para mantener un estilo consistente.
+├── jsconfig.json # Configuración del proyecto JavaScript para el editor.
+├── components.json # Configuración para la CLI de shadcn/ui.
+├── LICENSE # Licencia del proyecto.
+├── README.md # Este archivo.
+├── .gitignore # Archivos y carpetas ignorados por Git.
 ├── src/
-│ ├── assets/ # Íconos, logos, fuentes...
-│ ├── components/ # Componentes de UI reutilizables
-│ ├── core/ # Lógica del sistema (lectura, cifrado, etc.)
-│ ├── styles/ # CSS globales o específicos
-│ ├── scripts/ # Scripts Python o de sistema
-│ ├── index.html # Archivo de Elementos Graficos Principal
-│ └── renderer.js # JS de la interfaz principal
+│   ├── components/ # Componentes de la interfaz de usuario (UI) basados en shadcn/ui.
+│   ├── core/ # Lógica central de la aplicación (manejo de archivos, IPC, etc.).
+│   ├── hooks/ # Hooks de React para la gestión de estado y lógica de componentes.
+│   ├── lib/ # Utilidades y librerías auxiliares.
+│   ├── modules/ # Módulos principales de la aplicación (Editor, Sidebar, etc.).
+│   ├── scripts/ # Scripts externos (Python) para funcionalidades específicas del sistema operativo.
+│   ├── styles/ # Archivos de estilos globales y específicos de componentes.
+│   ├── App.jsx # Componente principal de React que renderiza la aplicación.
+│   ├── index.html # Punto de entrada HTML para el renderer de Electron.
+│   └── renderer.jsx # Script que renderiza la aplicación de React en la ventana de Electron.
+├── .vscode/
+└── node_modules/
 ```
 
 ---
