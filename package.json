@@ -7,18 +7,31 @@
     "dev": "vite",
     "start": "concurrently --names \"VITE,ELECTRON\" --kill-others \"npm run dev\" \"npm run dev:electron\"",
     "dev:electron": "electron .",
-    "build": "vite build",
+    "build": "vite build && electron-builder",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [],
-  "author": "",
-  "license": "MIT",
+  "author": "DuskStarGITHUB",
+  "license": "Exclusive in GITHUB",
   "type": "commonjs",
+  "build": {
+    "appId": "com.example.ntsapp",
+    "productName": "NTS App",
+    "files": [
+      "dist/**/*",
+      "main.js",
+      "src/core/preload.js"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.21",
     "concurrently": "^9.2.0",
     "electron": "^37.2.6",
+    "electron-builder": "^26.0.12",
     "path": "^0.12.7",
     "postcss": "^8.5.6",
     "vite": "^7.1.0"
