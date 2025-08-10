@@ -2,9 +2,9 @@
 
 **NTS App** es una aplicación de escritorio multiplataforma enfocada en la gestión de notas simples y cifradas, con una estética minimalista, transparente y oscura, diseñada para ofrecer rendimiento, privacidad y una experiencia fluida.
 
-NOW UI 1.5
+NOW UI 2.0
 <div align="center">
-  <img width="1871" height="1063" alt="imagen" src="https://github.com/user-attachments/assets/ef0bb020-22cc-4810-89a7-399b4bd08374" />
+  <img width="1882" height="1075" alt="imagen" src="https://github.com/user-attachments/assets/52120679-aaad-45ef-903a-e8a1f67141d5" />
 </div>
 
 ---
@@ -17,7 +17,7 @@ NOW UI 1.5
 - ⚙️ Compatible con Linux, Windows y macOS.
 - 💻 Soporte Automatico de Transparencia + desenfoque (blur) en KDE Plasma con KWin (Linux).
 <div align="center">
-  <img width="825" height="647" alt="imagen" src="https://github.com/user-attachments/assets/5afb3442-15b8-4dc7-bd7a-f4dd7be3279b" />
+  <img width="1054" height="771" alt="imagen" src="https://github.com/user-attachments/assets/07d1370a-7af2-4018-9d73-92aca8e78176" />
 </div>
 
 
