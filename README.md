@@ -51,7 +51,7 @@ ntsapp/
 │   ├── index.html # Punto de entrada HTML para el renderer de Electron.
 │   └── renderer.jsx # Script que renderiza la aplicación de React en la ventana de Electron.
 ├── .vscode/
-└── node_modules/
+├── settings.json # GIT Config for VSCode
 ```
 
 ---
