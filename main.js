@@ -3,7 +3,7 @@
  * @description Aplicación de notas NTS con Electron y Vite.
  * @version 1.0.0
  * @created 2025-07-08
- * @updated 2025-08-07
+ * @updated 2025-08-25
  */
 
 // STATE EXEC

@@ -1,8 +1,15 @@
+/**
+ * @file NoteEditor.jsx
+ * @description Module React application of Editor Section.
+ */
+
+// REACT DEPENDENCIES
 import React from 'react'
 import NoteTitleInput from './NoteTitleInput'
 import Editor from './Editor'
 import MarkdownPreview from './MarkdownPreview'
 
+// MODULE
 export default function NoteEditor({
   note,
   content,

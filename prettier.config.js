@@ -1,3 +1,4 @@
+// PRETTIER CONFIG
 const options = {
   arrowParens: 'avoid',
   singleQuote: true,

@@ -1,33 +1,40 @@
-import React, { useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
+/**
+ * @file NoteTilteInput.jsx
+ * @description Component React application for Rename Notes.
+ */
 
+// REACT DEPENDENCIES
+import React, { useState, useRef, useEffect } from 'react'
+import { Input } from '@/components/ui/input'
+
+// COMPONENT
 export default function NoteTitleInput({ title, onRename, note }) {
-  const [currentTitle, setCurrentTitle] = useState(title.replace(".md", ""));
+  const [currentTitle, setCurrentTitle] = useState(title.replace('.md', ''))
+  const debounceRef = useRef(null)
   useEffect(() => {
-    setCurrentTitle(title.replace(".md", ""));
-  }, [title]);
-  useEffect(() => {
-    const originalTitle = title.replace(".md", "");
-    if (currentTitle === originalTitle) {
-      return;
+    setCurrentTitle(title.replace('.md', ''))
+  }, [note])
+  const handleChange = e => {
+    const value = e.target.value
+    setCurrentTitle(value)
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current)
     }
-    const handler = setTimeout(() => {
-      const trimmedTitle = currentTitle.trim();
-      if (trimmedTitle && trimmedTitle !== originalTitle) {
-        onRename(note, trimmedTitle);
+    debounceRef.current = setTimeout(() => {
+      const trimmed = value.trim()
+      if (trimmed && trimmed !== title.replace('.md', '')) {
+        console.log('🔄 Renombrando a:', trimmed)
+        onRename(note, trimmed)
       }
-    }, 1000);
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [currentTitle, note, title, onRename]);
+    }, 1000)
+  }
   return (
     <Input
       value={currentTitle}
-      onChange={(e) => setCurrentTitle(e.target.value)}
+      onChange={handleChange}
       aria-label="Nombre de la nota"
       className="mb-4 text-lg font-semibold bg-zinc-800 text-white"
       placeholder="Nombra tu nota..."
     />
-  );
+  )
 }

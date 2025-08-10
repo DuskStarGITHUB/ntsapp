@@ -6,9 +6,11 @@
 @description Delete Notes with this script.
 """
 
+# DEPENDENCIES
 import sys
 import os
 
+# FUNCTION
 def delete_note(filename):
     try:
         if os.path.exists(filename):
@@ -22,6 +24,7 @@ def delete_note(filename):
         print(f"Error: {e}")
         return 2
 
+# CALL
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("No filename provided")

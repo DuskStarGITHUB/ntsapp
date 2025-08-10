@@ -1,5 +1,16 @@
+/**
+ * @name usesNotes.js
+ * @description Functions for Components.
+ * @version 1.0.0
+ * @created 2025-07-08
+ * @updated 2025-08-25
+ */
+
+// DEPENDENCIES
 import { useState, useEffect, useCallback } from 'react'
 
+
+// FUNCTIONS
 export const useNotes = () => {
   const [notes, setNotes] = useState([])
   const [selectedNote, setSelectedNote] = useState(null)
@@ -8,6 +19,7 @@ export const useNotes = () => {
   const fetchNotes = async () => {
     const list = await window.electronAPI.listNotes()
     setNotes(list)
+    return list
   }
   const deleteNote = async note => {
     if (!note) return
@@ -32,83 +44,40 @@ export const useNotes = () => {
       count++
     }
     await window.electronAPI.saveNote(newPath, originalContent)
-    await fetchNotes()
-    const newNote = notes.find(n => n.name === newName)
+    const updatedNotes = await fetchNotes()
+    const newNote = updatedNotes.find(n => n.name === newName)
     if (newNote) {
       setSelectedNote(newNote)
     }
   }
-  const renameNote = async (note, newName) => {
+  const renameNote = useCallback(async (note, newName) => {
     if (!note || !newName) return
+    console.log('🔄 Renombrando nota:', note.name, '→', newName)
     const result = await window.electronAPI.renameNote(note.path, newName)
     if (result.success) {
-      await fetchNotes()
-      const newNote = notes.find(n => n.name === `${newName}.md`)
-      if (newNote) {
-        setSelectedNote(newNote)
+      const updatedNotes = await fetchNotes()
+      const renamedNote = updatedNotes.find(n => n.name === `${newName}.md`)
+      if (renamedNote) {
+        setSelectedNote(renamedNote)
       }
     } else {
       alert('Error al renombrar la nota: ' + (result.error || 'Desconocido'))
     }
-  }
+  }, [])
   const createNote = async () => {
     if (!baseDir) return
-
     let newNoteName = ''
     let newPath = ''
     let count = 1
-
     do {
       newNoteName = `nueva-nota-${count}.md`
       newPath = `${baseDir}/notes/${newNoteName}`
       count++
     } while (notes.some(n => n.name === newNoteName))
-
-    const newNoteContent = `# Nueva Nota\n\nDescripcion:\n\n---\n- fecha: 00/00/0000\n- ubicacion: ...\n- area:\n---\n
-\
-resumen:\n\
-\
-\n\
-\
-## Contenido
-\n\
-\
-\n\
-\
-\n\
-\
-\n\
-\
-\n\
-\
-\n\
-\
-\n\
-\
-\n\
-\
-\n\
-\
-\n\
-\
-\n\
-\
-\n\
-\
-\n\
-\
-\n\
-\
-\n\
-\
-\n\
-\
-\n\
-\
-`
+    const newNoteContent = `# Nueva Nota\n\nDescripcion:\n\n---\n- fecha: 00/00/0000\n- ubicacion: ...\n- area:\n---\n\nresumen:\n\n## Contenido\n\n`
     await window.electronAPI.saveNote(newPath, newNoteContent)
-    await fetchNotes()
-    const newNote = notes.find(n => n.name === newNoteName)
+    const updatedNotes = await fetchNotes()
+    const newNote = updatedNotes.find(n => n.name === newNoteName)
     if (newNote) {
       setSelectedNote(newNote)
     }

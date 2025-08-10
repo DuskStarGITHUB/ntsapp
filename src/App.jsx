@@ -1,8 +1,14 @@
-import React from "react";
-import Sidebar from "./modules/Sidebar/Sidebar";
-import NoteEditor from "./modules/NoteEditor/NoteEditor";
-import { useNotes } from "./hooks/useNotes";
-import "/styles/global.css";
+/**
+ * @file App.jsx
+ * @description The call joined for the React application.
+ */
+
+// REACT DEPENDENCIES
+import React from 'react'
+import Sidebar from './modules/Sidebar/Sidebar'
+import NoteEditor from './modules/NoteEditor/NoteEditor'
+import { useNotes } from './hooks/useNotes'
+import '/styles/global.css'
 
 export default function App() {
   const {
@@ -14,8 +20,8 @@ export default function App() {
     createNote,
     saveContent,
     setSelectedNote,
-    renameNote,
-  } = useNotes();
+    renameNote
+  } = useNotes()
 
   return (
     <div className="flex h-screen bg-transparent text-white">
@@ -34,5 +40,5 @@ export default function App() {
         onRenameNote={renameNote}
       />
     </div>
-  );
+  )
 }
