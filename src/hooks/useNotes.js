@@ -63,11 +63,9 @@ export const useNotes = () => {
     }
   };
   const saveContent = useCallback(async (newContent) => {
-    if (newContent !== content) { // Only update if content has actually changed
-      setContent(newContent);
-      if (selectedNote) {
-        await window.electronAPI.saveNote(selectedNote.path, newContent);
-      }
+    setContent(newContent);
+    if (selectedNote) {
+      await window.electronAPI.saveNote(selectedNote.path, newContent);
     }
   }, [selectedNote]); // Dependencies for useCallback
   useEffect(() => {

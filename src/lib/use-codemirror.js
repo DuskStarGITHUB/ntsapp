@@ -35,7 +35,7 @@ const useCodeMirror = props => {
   const currentDoc = useRef(initialDoc);
   const debouncedOnChange = useRef(debounce(newDoc => {
     onChange && onChange(newDoc);
-  }, 300)).current; // 300ms debounce time
+  }, 300)).current;
 
   useEffect(() => {
     if (!refContainer.current) return
@@ -70,22 +70,7 @@ const useCodeMirror = props => {
       view.destroy()
     }
   }, [refContainer, onChange])
-  useEffect(() => {
-    if (editorView) {
-      if (ignoreNextExternalUpdate.current) {
-        ignoreNextExternalUpdate.current = false;
-      } else if (initialDoc !== currentDoc.current) {
-        editorView.dispatch({
-          changes: {
-            from: 0,
-            to: editorView.state.doc.length,
-            insert: initialDoc || ''
-          }
-        });
-        currentDoc.current = initialDoc;
-      }
-    }
-  }, [initialDoc, editorView])
+  
   return [refContainer, editorView]
 }
 

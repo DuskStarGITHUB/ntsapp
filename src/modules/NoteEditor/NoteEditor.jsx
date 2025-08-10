@@ -21,7 +21,6 @@ export default function NoteEditor({
       <NoteTitleInput title={note.name} onRename={onRenameNote} note={note} />
       <div className="flex flex-1 gap-4">
         <div className="flex-1 flex flex-col">
-          {/* Reemplazamos NoteContentTextarea con el nuevo Editor */}
           <Editor
             value={content}
             onChange={onChangeContent}
