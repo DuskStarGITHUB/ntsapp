@@ -7,24 +7,53 @@
     "dev": "vite",
     "start": "concurrently --names \"VITE,ELECTRON\" --kill-others \"npm run dev\" \"npm run dev:electron\"",
     "dev:electron": "electron .",
+    "typecheck": "tsc --noEmit",
+    "postinstall": "electron-builder install-app-deps",
     "build": "vite build && electron-builder",
-    "typecheck": "tsc --noEmit"
+    "dist": "npm run build && electron-builder"
   },
   "keywords": [],
-  "author": "DuskStarGITHUB",
+  "author": {
+    "name": "DuskStarGITHUB",
+    "email": "tu-email@ejemplo.com"
+  },
   "license": "Exclusive in GITHUB",
   "type": "commonjs",
   "build": {
     "appId": "com.example.ntsapp",
-    "productName": "NTS App",
+    "productName": "NTSApp",
+    "copyright": "Copyright © 2025 DuskStarGITHUB",
     "files": [
       "dist/**/*",
+      "assets/**/*",
+      "src/**/*",
       "main.js",
-      "src/core/preload.js"
+      "package.json",
+      "!node_modules/**/*"
     ],
     "directories": {
-      "buildResources": "assets"
-    }
+      "buildResources": "assets",
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon2.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon2.icns"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Utility",
+      "icon": "assets/icon2.png",
+      "maintainer": "tu-email@ejemplo.com"
+    },
+    "asar": false,
+    "npmRebuild": false,
+    "publish": null
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.0.0",
@@ -34,7 +63,9 @@
     "electron-builder": "^26.0.12",
     "path": "^0.12.7",
     "postcss": "^8.5.6",
-    "vite": "^7.1.0"
+    "rollup": "^3.29.4",
+    "vite": "^7.1.0",
+    "cross-env": "^7.0.3"
   },
   "dependencies": {
     "@codemirror/lang-markdown": "^6.3.4",

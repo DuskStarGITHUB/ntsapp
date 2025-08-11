@@ -50,7 +50,11 @@ function initWindow() {
       preload: path.join(__dirname, 'src', 'core', 'preload.js')
     }
   })
-  win.loadURL('http://localhost:5173')
+  if (app.isPackaged) {
+    win.loadFile(path.join(__dirname, 'dist', 'index.html'))
+  } else {
+    win.loadURL('http://localhost:5173')
+  }
   if (userApp === 'developer') {
     win.webContents.openDevTools({ mode: 'detach' })
   }
