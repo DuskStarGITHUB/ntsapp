@@ -11,11 +11,10 @@ NOW UI 2.0
 
 ## 🚀 Características
 
-- 🧠 Interfaz intuitiva con soporte para `.txt` y `.nts` (formato cifrado).
+- 🧠 Interfaz intuitiva con soporte para .md.
 - 🌐 Tecnología base: [Electron](https://electronjs.org), [Vite](https://vitejs.dev).
-- 🔐 Soporte para cifrado personalizado.
-- ⚙️ Compatible con Linux, Windows y macOS.
-- 💻 Soporte Automatico de Transparencia + desenfoque (blur) en KDE Plasma con KWin (Linux).
+- ⚙️ Compatible con Linux
+- 💻 Soporte Automatico de Transparencia + desenfoque (blur) con KWin (Linux).
 <div align="center">
   <img width="1054" height="771" alt="imagen" src="https://github.com/user-attachments/assets/07d1370a-7af2-4018-9d73-92aca8e78176" />
 </div>
