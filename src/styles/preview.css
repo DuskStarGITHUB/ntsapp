@@ -7,9 +7,11 @@
 }
 
 .markdown-body {
-  font-size: 50% !important;
+  font-size: 60% !important;
   width: 100% !important;
   min-width: 0 !important;
+  background-color: none !important;
+  background: rgb(0 0 0 / 0.3) !important;
 }
 
 .markdown-body hr {
@@ -54,4 +56,9 @@
 .markdown-body pre::-webkit-scrollbar-thumb {
   background-color: #4b5563 !important;
   border-radius: 3px !important;
+}
+
+.overflow-guard {
+  max-width: 100% !important;
+  overflow: hidden !important;
 }

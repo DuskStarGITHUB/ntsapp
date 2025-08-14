@@ -1,0 +1,19 @@
+@media (max-width: 1300px) {
+  .markdown-body {
+    --base-font-size: clamp(11px, 1.8vw, 13px) !important;
+    font-size: 50% !important;
+  }
+  .markdown-body th,
+  .markdown-body td {
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+}
+@media (max-width: 768px) {
+  .markdown-body {
+    --base-font-size: 12px !important;
+  }
+  .markdown-body pre {
+    white-space: pre-wrap !important;
+  }
+}

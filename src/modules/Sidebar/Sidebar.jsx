@@ -39,7 +39,7 @@ export default function Sidebar({
     setContextMenu({ visible: false, x: 0, y: 0, note: null })
   }
   return (
-    <aside className="w-80 p-6 border-r border-zinc-700 flex flex-col bg-zinc-950 relative">
+    <aside className="w-64 p-6 border-r border-zinc-700 flex flex-col bg-zinc-950 relative">
       <Card className="p-4 mb-4 bg-zinc-900 border-zinc-800">
         <h2 className="text-5xl font-semibold text-center text-white">Notas</h2>
       </Card>

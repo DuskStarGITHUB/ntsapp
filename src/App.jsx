@@ -9,6 +9,7 @@ import Sidebar from './modules/Sidebar/Sidebar'
 import NoteEditor from './modules/NoteEditor/NoteEditor'
 import { useNotes } from './hooks/useNotes'
 import '/styles/global.css'
+import '/styles/responsive.css'
 
 export default function App() {
   const {
