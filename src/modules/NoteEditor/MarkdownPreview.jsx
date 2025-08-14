@@ -14,9 +14,11 @@ import '../../styles/preview.css'
 // COMPONENT
 export default function MarkdownPreview({ content }) {
   return (
-    <section className="markdown-body rounded-md p-4 h-full overflow-auto ">
-      <ScrollArea>
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+    <section className="markdown-body rounded-md p-4 h-full overflow-auto">
+      <ScrollArea className="w-full h-full">
+        <div className="w-full">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+        </div>
       </ScrollArea>
     </section>
   )
