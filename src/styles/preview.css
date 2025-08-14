@@ -1,9 +1,15 @@
 /* FIXED CSS FOR MODULE PREVIEW */
-.markdown-body {
-  font-size: 10px !important;
-  background-color: #0000008a !important;
-  border: 1px solid white !important;
+.markdown-preview-container {
   width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  border-radius: 0.375rem !important;
+}
+
+.markdown-body {
+  font-size: 50% !important;
+  width: 100% !important;
+  min-width: 0 !important;
 }
 
 .markdown-body hr {
@@ -14,27 +20,38 @@
   width: 100% !important;
   max-width: 100% !important;
   display: table !important;
-  border-collapse: collapse;
-  overflow-x: auto !important;
+  border-collapse: collapse !important;
 }
 
 .markdown-body th,
 .markdown-body td {
-  word-wrap: break-word;
+  word-wrap: break-word !important;
   white-space: normal !important;
-  padding: 4px 8px;
+  padding: 4px 8px !important;
 }
 
 .markdown-body pre {
-  overflow-x: auto !important;
-  max-width: 100% !important;
   background: #1e1e1e;
   padding: 8px !important;
   border-radius: 4px !important;
+  overflow-x: auto !important;
+  max-width: 100% !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
 }
 
 .markdown-body code {
-  background: #1e1e1e !important;
-  padding: 2px 4px !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  max-width: 100% !important;
+  display: inline-block !important;
+}
+
+.markdown-body pre::-webkit-scrollbar {
+  height: 6px !important;
+}
+
+.markdown-body pre::-webkit-scrollbar-thumb {
+  background-color: #4b5563 !important;
   border-radius: 3px !important;
 }

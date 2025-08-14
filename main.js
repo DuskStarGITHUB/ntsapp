@@ -7,7 +7,7 @@
  */
 
 // STATE EXEC
-const userApp = 'user'
+const userApp = 'developer'
 
 // DEPENDENCIES
 const { app, BrowserWindow } = require('electron')
